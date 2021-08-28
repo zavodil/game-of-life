@@ -8,8 +8,9 @@ use near_sdk::{
 
 near_sdk::setup_alloc!();
 
-// empty -> 3 neigh -> live
-// live -> 2 neigh -> live
+// RULES:
+// empty block -> has 3 neighboring blocks-> live
+// live block -> has 2 neighboring blocks -> live
 // empty|live -> empty
 
 // ....
@@ -136,56 +137,10 @@ impl BoardWithBlock {
     }
 }
 
-#[derive(BorshSerialize, BorshStorageKey)]
-pub enum StorageKey {
-    Boards,   // 0x00
-    Accounts, // 0x01
-}
-
-#[derive(BorshDeserialize, BorshSerialize)]
-pub struct AccountV1 {
-    pub owner_id: AccountId,
-    pub balance: Balance,
-}
-
-#[derive(BorshDeserialize, BorshSerialize)]
-pub struct Account {
-    pub owner_id: AccountId,
-    pub balance: Balance,
-
-    pub new_balance: Balance,
-}
-
-#[derive(BorshDeserialize, BorshSerialize)]
-pub enum VAccount {
-    V1(AccountV1),
-    CurrentVersion(Account),
-}
-
-impl From<VAccount> for Account {
-    fn from(vaccount: VAccount) -> Self {
-        match vaccount {
-            VAccount::V1(account_v1) => Account {
-                owner_id: account_v1.owner_id,
-                balance: account_v1.balance,
-                new_balance: 0,
-            },
-            VAccount::CurrentVersion(account) => account,
-        }
-    }
-}
-
-impl From<Account> for VAccount {
-    fn from(account: Account) -> Self {
-        VAccount::CurrentVersion(account)
-    }
-}
-
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct Contract {
-    pub boards: Vector<BoardWithBlock>,
-    pub accounts: UnorderedMap<AccountId, VAccount>,
+    pub boards: Vector<BoardWithBlock>
 }
 
 pub type BoardIndex = u64;
@@ -195,15 +150,8 @@ impl Contract {
     #[init]
     pub fn new() -> Self {
         Self {
-            boards: Vector::new(StorageKey::Boards),
-            accounts: UnorderedMap::new(StorageKey::Accounts),
+            boards: Vector::new(StorageKey::Boards)
         }
-    }
-
-    pub fn get_account(&self, account_id: AccountId) -> Option<Account> {
-        self.accounts
-            .get(&account_id)
-            .map(|vaccount| vaccount.into())
     }
 
     // `{"field": [13, 58, 245]}`

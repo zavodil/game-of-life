@@ -65,27 +65,10 @@ If you need to install `near-cli`:
 npm install near-cli -g
 ```
 
-## Login
-If you do not have a NEAR account, please create one with [NEAR Wallet](https://wallet.testnet.near.org).
-
-In the project root, login with `near-cli` by following the instructions after this command:
-
-```
-near login
-```
-
-Modify the top of `src/config.js`, changing the `CONTRACT_NAME` to be the NEAR account that was just used to log in.
-
-```javascript
-…
-const CONTRACT_NAME = 'YOUR_ACCOUNT_NAME_HERE'; /* TODO: fill this in! */
-…
-```
-
 Start the example!
 
 ```
-yarn start
+near dev-deploy -f
 ```
 
 ## To Test
@@ -97,10 +80,7 @@ cargo test -- --nocapture
 
 ## To Explore
 
-- `contract/src/lib.rs` for the contract code
-- `src/index.html` for the front-end HTML
-- `src/main.js` for the JavaScript front-end code and how to integrate contracts
-- `src/test.js` for the JS tests for the contract
+- `src/lib.rs` for the contract code
 
 ## To Build the Documentation
 
