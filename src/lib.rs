@@ -1,9 +1,9 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::collections::{UnorderedMap, Vector};
+use near_sdk::collections::{Vector};
 use near_sdk::json_types::Base64VecU8;
 use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::{
-    env, near_bindgen, AccountId, Balance, BlockHeight, BorshStorageKey, PanicOnDefault,
+    env, near_bindgen, BlockHeight, BorshStorageKey, PanicOnDefault,
 };
 
 near_sdk::setup_alloc!();
@@ -135,6 +135,11 @@ impl BoardWithBlock {
             prev_block_height,
         }
     }
+}
+
+#[derive(BorshSerialize, BorshStorageKey)]
+pub enum StorageKey {
+    Boards
 }
 
 #[near_bindgen]

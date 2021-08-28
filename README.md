@@ -68,6 +68,7 @@ npm install near-cli -g
 Start the example!
 
 ```
+./build.sh
 near dev-deploy -f
 ```
 
